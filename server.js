@@ -28,7 +28,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/chats', chatRoutes);
 
 // Error handler
-app.use(errorHandler);
+// app.use(errorHandler);
 
 // Test Route
 app.get('/', (req, res) => {
