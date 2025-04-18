@@ -29,9 +29,9 @@ module.exports = (io) => {
         });
 
         const populatedMsg = await newMessage.populate('senderId', 'username');
-
         // Emit to all in room
         io.to(chatRoomId).emit('receive_message', populatedMsg);
+        
       } catch (err) {
         console.error('❌ Error sending message:', err.message);
       }

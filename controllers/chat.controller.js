@@ -15,7 +15,7 @@ exports.createRoom = async (req, res) => {
 
 exports.getRooms = async (req, res) => {
   try {
-    console.log(req);
+    // console.log(req);
     const rooms = await ChatRoom.find({ participants: req.user.id })
       .populate('participants', 'username email')
       .populate('lastMessage');
