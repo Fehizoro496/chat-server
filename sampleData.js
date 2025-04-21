@@ -28,31 +28,28 @@ const seed = async () => {
 
     console.log('✅ Users created');
 
-    // Create Chat Room (Alice & Bob)
-    const chatRoom = await ChatRoom.create({
-      participants: [users[0]._id, users[1]._id],
-      isGroupChat: false,
+    // Create ChatRooms
+    const chatRooms = [];
+
+    // Create a chat room for each pair of users
+    for (let i = 0; i < users.length; i++) {
+      for (let j = i + 1; j < users.length; j++) {
+        const chatRoom = await ChatRoom.create({
+          name: `${users[i].username}-${users[j].username}`,
+          participants: [users[i]._id, users[j]._id],
+        });
+        chatRooms.push(chatRoom);
+      }
+    }
+
+    // Create a chat room named "all" with all users as participants
+    const allChatRoom = await ChatRoom.create({
+      name: 'all',
+      participants: users.map(user => user._id),
     });
+    chatRooms.push(allChatRoom);
 
-    console.log('✅ Chat room created');
-
-    // Create Messages
-    await Message.insertMany([
-      {
-        chatRoomId: chatRoom._id,
-        senderId: users[0]._id,
-        message: 'Hey Bob!',
-        messageType: 'text',
-      },
-      {
-        chatRoomId: chatRoom._id,
-        senderId: users[1]._id,
-        message: 'Hey Alice, how are you?',
-        messageType: 'text',
-      },
-    ]);
-
-    console.log('✅ Messages inserted');
+    console.log('✅ Chat rooms created');
 
     // Link last message to chat room
     const lastMessage = await Message.findOne({ chatRoomId: chatRoom._id }).sort({ createdAt: -1 });
