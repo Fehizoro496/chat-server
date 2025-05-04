@@ -38,7 +38,11 @@ exports.getMessages = async (req, res) => {
 exports.markAsSeen = async (req, res) => {
   try {
     const { messageId } = req.params;
-    await Message.findByIdAndUpdate(messageId, { isSeen: true });
+    await Message.findByIdAndUpdate(
+      messageId,
+      { $addToSet: { seenBy: req.user.id } },
+      { new: true }
+    );
     res.status(200).json({ message: 'Marked as seen' });
   } catch (err) {
     res.status(500).json({ message: 'Failed to mark message as seen' });

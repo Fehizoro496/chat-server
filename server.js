@@ -49,5 +49,5 @@ socketHandler(io);
 
 // Start server
 server.listen(PORT, () => {
-  console.log(`🚀 Server listening on http://localhost:${PORT}`);
+  if (process.env.URL=='localhost') console.log(`🚀 Server listening on http://localhost:${PORT}`);
 });

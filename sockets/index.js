@@ -29,6 +29,7 @@ module.exports = (io) => {
         });
 
         const populatedMsg = await newMessage.populate('senderId', 'username');
+        console.log(populatedMsg);
         
         // Emit to all in room
         io.to(chatRoomId).emit('receive_message', populatedMsg);

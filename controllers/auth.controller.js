@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const ChatRoom = require('../models/ChatRoom');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -13,11 +14,22 @@ exports.register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ username, email, password: hashedPassword });
+    const allUsers = await User.find();
+    const newUser = await User.create({ username, email, password: hashedPassword });
+    for (let i=0; i < allUsers.length; i++) {
+            ChatRoom.create({
+              name: `${newUser.username}-${allUsers[i].username}`,
+              participants: [newUser._id, allUsers[i]._id],
+            });
+          }
+    await ChatRoom.findOneAndUpdate(
+      { name: 'all' },
+      { $push: { participants: newUser._id } }
+    );
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-    res.status(201).json({ user, token });
+    res.status(201).json({ user: newUser, token });
   } catch (err) {
     res.status(500).json({ message: 'Registration failed', error: err.message });
   }

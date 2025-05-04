@@ -21,10 +21,10 @@ const messageSchema = new mongoose.Schema(
       enum: ['text', 'image', 'file'],
       default: 'text'
     },
-    isSeen: {
-      type: Boolean,
-      default: false
-    }
+    seenBy: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }]
   },
   { timestamps: true }
 );
