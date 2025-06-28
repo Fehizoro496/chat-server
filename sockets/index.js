@@ -11,15 +11,21 @@ module.exports = (io) => {
       console.log(`📥 Joined room: ${roomId}`);
     });
 
+    socket.on('leave_room',(roomId)=>{
+      socket.leave(roomId);
+      console.log(`🚪 Left room: ${roomId}`);
+    });
+    
     // Send message
     socket.on('send_message', async (data) => {
-      const { chatRoomId, senderId, message, messageType = 'text' } = data;
+      const { chatRoomId, senderId, message, seenBy, messageType = 'text' } = data;
 
       try {
         const newMessage = await Message.create({
           chatRoomId,
           senderId,
           message,
+          seenBy,
           messageType
         });
 
