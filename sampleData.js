@@ -18,12 +18,12 @@ const seed = async () => {
     await Message.deleteMany();
 
     // Create Users
-    const hashedPassword = await bcrypt.hash('password123', 10);
+    const hashedPassword = await bcrypt.hash('12345678', 10);
 
     const users = await User.insertMany([
-      { username: 'Alice', email: 'alice@example.com', password: hashedPassword },
-      { username: 'Bob', email: 'bob@example.com', password: hashedPassword },
-      { username: 'Charlie', email: 'charlie@example.com', password: hashedPassword },
+      { username: 'Pasteur', email: 'pasteur@example.com', password: hashedPassword },
+      { username: 'Tonia', email: 'tonia@example.com', password: hashedPassword },
+      { username: 'Tech', email: 'tech@example.com', password: hashedPassword },
     ]);
 
     console.log('✅ Users created');
@@ -52,9 +52,11 @@ const seed = async () => {
     console.log('✅ Chat rooms created');
 
     // Link last message to chat room
-    const lastMessage = await Message.findOne({ chatRoomId: chatRoom._id }).sort({ createdAt: -1 });
-    chatRoom.lastMessage = lastMessage._id;
-    await chatRoom.save();
+    chatRooms.forEach(async (chatRoom)=>{
+      const lastMessage = await Message.findOne({ chatRoomId: chatRoom._id }).sort({ createdAt: -1 });
+      chatRoom.lastMessage = lastMessage._id;
+      await chatRoom.save();
+    })
 
     console.log('✅ Chat room updated with last message');
     console.log('🎉 Sample data successfully inserted!');

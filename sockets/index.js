@@ -18,12 +18,13 @@ module.exports = (io) => {
     
     // Send message
     socket.on('send_message', async (data) => {
-      const { chatRoomId, senderId, message, seenBy, messageType = 'text' } = data;
+      const { chatRoomId, senderId, senderName, message, seenBy, messageType = 'text' } = data;
 
       try {
         const newMessage = await Message.create({
           chatRoomId,
           senderId,
+          senderName,
           message,
           seenBy,
           messageType
