@@ -23,7 +23,7 @@ exports.register = async (req, res) => {
             });
           }
     await ChatRoom.findOneAndUpdate(
-      { name: 'all' },
+      { name: 'All' },
       { $push: { participants: newUser._id } }
     );
 

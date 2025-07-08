@@ -44,7 +44,8 @@ const seed = async () => {
 
     // Create a chat room named "all" with all users as participants
     const allChatRoom = await ChatRoom.create({
-      name: 'all',
+      name: 'All',
+      isGroupChat: true,
       participants: users.map(user => user._id),
     });
     chatRooms.push(allChatRoom);
